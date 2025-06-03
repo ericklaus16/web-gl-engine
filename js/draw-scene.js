@@ -1,9 +1,4 @@
 function drawScene(gl, programInfo, buffers, texture, cubeRotation) {
-    gl.clearColor(0.0, 0.0, 0.0, 1.0)
-    gl.clearDepth(1.0) // Limpar tudo
-    gl.enable(gl.DEPTH_TEST) 
-    gl.depthFunc(gl.LEQUAL) // Coisas próximas "obscurecem" coisas longe
-
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
     /*
@@ -16,7 +11,6 @@ function drawScene(gl, programInfo, buffers, texture, cubeRotation) {
     const zNear = 0.1
     const zFar = 100
     const projectionMatrix = mat4.create()
-
     mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar)
     
     // Definindo a posição de desenho para o ponto identidade (centro da cena)
@@ -26,7 +20,7 @@ function drawScene(gl, programInfo, buffers, texture, cubeRotation) {
     mat4.translate(
         modelViewMatrix, // matriz destino
         modelViewMatrix, // matriz de translado
-        [-0.0, 0.0, -6.0]
+        [0, 0, -6]
     ) // Quantia de translado
 
     mat4.rotate(
@@ -57,10 +51,9 @@ function drawScene(gl, programInfo, buffers, texture, cubeRotation) {
     // Diz ao WebGl como colocar as posições do buffer de posições no vertexPosition 
     setPositionAttribute(gl, buffers, programInfo)
     setTextureAttribute(gl, buffers, programInfo)
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices)
-
     setNormalAttribute(gl, buffers, programInfo)
+    
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices)
 
     gl.useProgram(programInfo.program)
 
@@ -82,17 +75,18 @@ function drawScene(gl, programInfo, buffers, texture, cubeRotation) {
     )
 
     gl.activeTexture(gl.TEXTURE0);
-
     gl.bindTexture(gl.TEXTURE_2D, texture);
-    
     gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
 
-    {
-        const vertexCount = 36;
-        const type = gl.UNSIGNED_SHORT;
-        const offset = 0;
-        gl.drawElements(gl.TRIANGLES, vertexCount, type, offset)
-    }
+    // {
+        // const vertexCount = 36;
+        // const type = gl.UNSIGNED_SHORT;
+        // const offset = 0;
+        // gl.drawElements(gl.TRIANGLES, vertexCount, type, offset)
+    // }
+    
+    gl.drawElements(gl.TRIANGLES, 36, gl.UNSIGNED_SHORT, 0);
+
 }
 
 function setPositionAttribute(gl, buffers, programInfo){
