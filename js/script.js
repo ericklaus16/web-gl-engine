@@ -4,6 +4,8 @@ import { drawScene } from "./draw-scene.js";
 let cubeRotation = 0.0
 let deltaTime = 0
 
+const fpsDisplayElement = document.querySelector("#fpsDisplay")
+
 main();
 
 function main() {
@@ -70,6 +72,12 @@ function main() {
         now *= 0.001; // convertendo para segundos
         deltaTime = now - then
         then = now
+
+        const fps = 1 / deltaTime;
+
+        if (fpsDisplayElement) {
+            fpsDisplayElement.innerHTML = `FPS: ${fps.toFixed(0)}`
+        }
 
         drawScene(gl, programInfo, buffers, cubeRotation)
         cubeRotation += deltaTime
