@@ -67,15 +67,15 @@ export class Renderer {
     }
 
     initScene() {
-        // const cube = new GameObject(this.gl, this.cubeBuffers, this.texture);
-        // cube.transform.position = [0, 0, -6];
+        const cube = new GameObject(this.gl, this.cubeBuffers, this.texture);
+        cube.transform.position = [-4, 0, -6];
+        this.sceneObjects.push(cube);
         
         const newCube = new GameObject(this.gl, this.cubeBuffers, this.texture);
         newCube.transform.position = [2, 0, -6];
         newCube.transform.scale = [0.5, 0.5, 0.5];
         this.sceneObjects.push(newCube);
 
-        // this.sceneObjects.push(cube);
     }
 
     initEventListeners() {
