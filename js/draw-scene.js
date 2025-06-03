@@ -1,4 +1,4 @@
-function drawScene(gl, programInfo, buffers) {
+function drawScene(gl, programInfo, buffers, cubeRotation) {
     gl.clearColor(0.0, 0.0, 0.0, 1.0)
     gl.clearDepth(1.0) // Limpar tudo
     gl.enable(gl.DEPTH_TEST) 
@@ -29,9 +29,31 @@ function drawScene(gl, programInfo, buffers) {
         [-0.0, 0.0, -6.0]
     ) // Quantia de translado
 
+    mat4.rotate(
+        modelViewMatrix,
+        modelViewMatrix,
+        cubeRotation,
+        [0, 0, 1]
+    ) // rotaciona no eixo Z
+
+    mat4.rotate(
+        modelViewMatrix,
+        modelViewMatrix,
+        cubeRotation * 0.7,
+        [0, 1, 0]
+    ) // rotaciona no eixo Y
+
+    mat4.rotate(
+        modelViewMatrix,
+        modelViewMatrix,
+        cubeRotation * 0.3,
+        [1, 0, 0]
+    ) // rotaciona no eixo X
+
     // Diz ao WebGl como colocar as posições do buffer de posições no vertexPosition 
     setPositionAttribute(gl, buffers, programInfo)
     setColorAttribute(gl, buffers, programInfo)
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices)
 
     gl.useProgram(programInfo.program)
 
@@ -48,14 +70,15 @@ function drawScene(gl, programInfo, buffers) {
     )
 
     {
+        const vertexCount = 36;
+        const type = gl.UNSIGNED_SHORT;
         const offset = 0;
-        const vertexCount = 4;
-        gl.drawArrays(gl.TRIANGLE_STRIP, offset, vertexCount)
+        gl.drawElements(gl.TRIANGLES, vertexCount, type, offset)
     }
 }
 
 function setPositionAttribute(gl, buffers, programInfo){
-    const numComponents = 2; // 2 valores por iteração
+    const numComponents = 3; // 3 valores por iteração (3D)
     const type = gl.FLOAT // Os dados no buffer são float 32 bits
     const normalize = false // Não normaliza
     const stride = 0 // quantos bytes pegar de um set de valores para o próximo

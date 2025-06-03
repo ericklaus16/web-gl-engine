@@ -1,6 +1,9 @@
 import { initBuffers } from "./init-buffer.js";
 import { drawScene } from "./draw-scene.js";
 
+let cubeRotation = 0.0
+let deltaTime = 0
+
 main();
 
 function main() {
@@ -58,7 +61,20 @@ function main() {
     // Constrói todos os objetos que forem desenhados
     const buffers = initBuffers(gl)
 
-    drawScene(gl, programInfo, buffers)
+    let then = 0
+
+    function render(now){
+        now *= 0.001; // convertendo para segundos
+        deltaTime = now - then
+        then = now
+
+        drawScene(gl, programInfo, buffers, cubeRotation)
+        cubeRotation += deltaTime
+
+        requestAnimationFrame(render)
+    }
+
+    requestAnimationFrame(render)
 }   
 
 // Inicializando um shader program, para que o WebGl saiba como desenhar os dados
