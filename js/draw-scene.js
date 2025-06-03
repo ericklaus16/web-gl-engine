@@ -31,6 +31,7 @@ function drawScene(gl, programInfo, buffers) {
 
     // Diz ao WebGl como colocar as posições do buffer de posições no vertexPosition 
     setPositionAttribute(gl, buffers, programInfo)
+    setColorAttribute(gl, buffers, programInfo)
 
     gl.useProgram(programInfo.program)
 
@@ -73,4 +74,24 @@ function setPositionAttribute(gl, buffers, programInfo){
     gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition)
 }
 
-export { drawScene  }
+function setColorAttribute(gl, buffers, programInfo) {
+    const numComponents = 4; 
+    const type = gl.FLOAT;
+    const normalize = false;
+    const stride = 0;
+    const offset = 0;
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color)
+    gl.vertexAttribPointer(
+        programInfo.attribLocations.vertexColor,
+        numComponents,
+        type,
+        normalize,
+        stride,
+        offset
+    )
+
+    gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor)
+}
+
+export { drawScene }

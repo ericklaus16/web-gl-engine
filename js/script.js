@@ -1,9 +1,7 @@
 import { initBuffers } from "./init-buffer.js";
 import { drawScene } from "./draw-scene.js";
 
-window.addEventListener("DOMContentLoaded", () => {
-    main();
-})
+main();
 
 function main() {
     const canvas = document.querySelector("#canvas")
@@ -20,17 +18,25 @@ function main() {
     // Vertex shader program
     const vsSource = `
         attribute vec4 aVertexPosition;
+        attribute vec4 aVertexColor;
+
         uniform mat4 uModelViewMatrix;
         uniform mat4 uProjectionMatrix;
+
+        varying lowp vec4 vColor;
+
         void main() {
             gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+            vColor = aVertexColor;
         }
     `
 
     // Fragment shader -> associa qual cor vai a qual pixel
     const fsSource = `
+        varying lowp vec4 vColor;
+
         void main() {
-            gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+            gl_FragColor = vColor;
         }
     `
 
@@ -40,7 +46,8 @@ function main() {
     const programInfo = {
         program: shaderProgram,
         attribLocations: {
-            vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition")
+            vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition"),
+            vertexColor: gl.getAttribLocation(shaderProgram, "aVertexColor"),
         },
         uniformLocations: {
             projectionMatrix: gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
